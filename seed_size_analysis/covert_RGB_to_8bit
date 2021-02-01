@@ -1,3 +1,4 @@
+#this is a .ijm imageJ macros to conver RGB to 8bit image (tiff)
 input = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs");
 output = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs/8bit_converted");
 
