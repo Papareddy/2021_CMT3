@@ -1,0 +1,36 @@
+input = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs/8bit_converted");
+output = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs/8bit_converted");
+
+suffix = ".tif";  //you only want to apply to tiff images, no need to ask
+
+processFolder(input);
+
+function processFolder(input) {
+  list = getFileList(input);
+  for (i = 0; i < list.length; i++) {
+    if(File.isDirectory(input + list[i]))   //if it's a directory, go to subfolder
+    processFolder("" + input + list[i]);
+    if(endsWith(list[i], suffix))   //if it's a tiff image, process it
+    processFile(input, output, list[i]);
+    //if it's neither a tiff nor a directory, do nothing
+  }
+  }
+
+
+
+    function processFile(input, output, file) {
+
+    print("Processing: " + input + file);
+
+    open(input + file);
+    run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel global");
+    run("Auto Threshold", "method=Otsu white");
+
+    run("Analyze Particles...", "size=1950-3750 display exclude");
+
+
+    saveAs("results", output + file + "_results.csv");
+
+    print("Saved to: " + output);
+    close();
+    }
