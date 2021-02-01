@@ -1,0 +1,32 @@
+input = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs");
+output = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs/8bit_converted");
+
+suffix = ".tif";  //you only want to apply to tiff images, no need to ask
+path = getDirectory("image");
+processFolder(input);
+
+function processFolder(input) {
+  list = getFileList(input);
+  for (i = 0; i < list.length; i++) {
+    if(File.isDirectory(input + list[i]))   //if it's a directory, go to subfolder
+    processFolder("" + input + list[i]);
+    if(endsWith(list[i], suffix))   //if it's a tiff image, process it
+    processFile(input, output, list[i]);
+    //if it's neither a tiff nor a directory, do nothing
+  }
+  }
+
+
+
+    function processFile(input, output, file) {
+
+    print("Processing: " + input + file);
+
+    open(input + file);
+
+    run("8-bit");
+    saveAs("tiff", output + file );
+
+    print("Saved to: " + output);
+    close();
+    }
