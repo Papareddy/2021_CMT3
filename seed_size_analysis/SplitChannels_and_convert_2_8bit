@@ -1,6 +1,5 @@
-/*
- * Macro template to process multiple images in a folder
- */
+run("Close All");
+
 
  input = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/transgenics");
  output = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/transgenics");
