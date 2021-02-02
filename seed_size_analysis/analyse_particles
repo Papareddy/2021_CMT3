@@ -16,12 +16,8 @@ function processFolder(input) {
   }
   }
 
-
-
     function processFile(input, output, file) {
-
     print("Processing: " + input + file);
-
     open(input + file);
     run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel global");
     run("Median...", "radius=3");
