@@ -1,0 +1,40 @@
+/*
+ * Macro template to process multiple images in a folder
+ */
+
+ input = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/transgenics");
+ output = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/transgenics");
+
+ suffix = ".czi";
+
+
+
+processFolder(input);
+
+// function to scan folders/subfolders/files to find files with correct suffix
+function processFolder(input) {
+	list = getFileList(input);
+	list = Array.sort(list);
+	for (i = 0; i < list.length; i++) {
+		if(File.isDirectory(input + File.separator + list[i]))
+			processFolder(input + File.separator + list[i]);
+		if(endsWith(list[i], suffix))
+			processFile(input, output, list[i]);
+	}
+}
+
+function processFile(input, output, file) {
+
+  run("Bio-Formats Importer", "open=" + input + list[i] +" ");
+  run("8-bit");
+  run("Split Channels");
+  title = getTitle();
+  saveAs("Tiff", output + file + "_tl.tif");
+  close();
+  title = getTitle();
+  saveAs("Tiff", output + file + "_fl.tif");
+  close();
+  print(title);
+  print("Processing: " + input + File.separator + file);
+  print("Saving to: " + output);
+}
