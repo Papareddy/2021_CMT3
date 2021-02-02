@@ -79,7 +79,7 @@ for (l=0; l<fileList.length; l++){
 		setOption("BlackBackground", true);
 		run("Convert to Mask");
 		run("Set Measurements...", "area mean standard min display redirect=" + Name +" decimal=2");
-		run("Analyze Particles...", "size=500-Infinity display add");
+		run("Analyze Particles...", "size=1950-3750 display add");
 
 		run("Merge Channels...", "c1=" + Name + " c2=CH2 create");
 		saveAs("Tiff", inDir + saveName + "Merge.tif");
