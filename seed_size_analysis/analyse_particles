@@ -1,3 +1,4 @@
+run("Close All");
 input = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs/8bit_converted");
 output = getDirectory("/Users/ranjith.papareddy/Downloads/seed_size/onlytiffs/8bit_converted");
 
