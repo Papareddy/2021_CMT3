@@ -1,0 +1,102 @@
+
+run("Close All");
+
+
+inDir = getDirectory("Choose Directory Containing Files "); 
+fileList = getFileList(inDir);
+print(fileList.length);
+
+Area = newArray(fileList.length);
+Spotnumber = newArray(fileList.length);
+SampleName = newArray(fileList.length);
+
+Dialog.create("Channels");
+	Dialog.addMessage("Please enter the Channels");
+	Dialog.addString("Fluorescent Channel: ", "fl");
+	Dialog.addString("Brightfield Channel: ", "tl");
+
+
+	Dialog.show();
+
+	CH1=Dialog.getString();
+	CH2=Dialog.getString();
+
+/********************
+ * Loop over files 
+ ********************/
+runNumber = 0;
+ 
+for (l=0; l<fileList.length; l++){
+	////Cut Imagename
+	inFileCut = lengthOf(fileList[l])-4;
+	//print(inFileCut);
+	saveName=substring(fileList[l],0,inFileCut);
+	Name=fileList[l];
+	file = inDir + fileList[l];
+	//print(fileList[i]); 
+	//print(Name);
+
+			
+		////Cut Imagename
+		Name=fileList[l];
+		file = inDir + fileList[l];
+		print(fileList[l]); 
+		//Slicecut = lengthOf(Slice1);
+		
+		////Check for Filename
+		Run = 0;
+		matching=(endsWith(Name, CH1 +  ".tif"));
+		if (matching==1) {
+			Run=1;	
+			matching=(lastIndexOf(Name, CH1));
+			inFileCut = matching;
+			saveName=substring(fileList[l],0,inFileCut);
+
+		}
+		else {};
+
+	
+	//print("Run = " + Run);
+
+	////Open files to merge
+
+	if (Run == 1){
+		setBatchMode(true);
+		roiManager("reset");
+		
+	////Open and save projection image
+		ImgCH1 = inDir + saveName + CH1 + ".tif"  ;
+		run("Bio-Formats Importer", "open=["+ImgCH1+"] color_mode=Default rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT");
+		//rename("CH1");
+
+		ImgCH2 = inDir + saveName + CH2 + ".tif"  ;
+		run("Bio-Formats Importer", "open=["+ImgCH2+"] color_mode=Default rois_import=[ROI manager] view=Hyperstack stack_order=XYCZT");
+		rename("CH2");
+		run("Duplicate...", "title=Mask");
+		
+		run("Median...", "radius=3");
+		setAutoThreshold("Otsu dark");
+		setOption("BlackBackground", true);
+		run("Convert to Mask");
+		run("Set Measurements...", "area mean standard min display redirect=" + Name +" decimal=2");
+		run("Analyze Particles...", "size=500-Infinity display add");
+
+		run("Merge Channels...", "c1=" + Name + " c2=CH2 create");
+		saveAs("Tiff", inDir + saveName + "Merge.tif");
+
+		run("From ROI Manager");
+		run("Flatten");
+
+		saveAs("Jpeg", inDir + saveName + "Segment.tif");
+
+
+		run("Close All");
+
+		
+		}
+		
+}
+
+saveAs("Results", inDir + "Results.csv");
+run("Clear Results");
+
