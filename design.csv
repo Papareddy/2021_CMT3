@@ -1,0 +1,3 @@
+group,replicate,fastq_1,fastq_2,antibody,control
+IP1,1,/scratch-cbe/users/ranjith.papareddy/chip_seq/chipseq/chip1.fq.gz,,TEST,IP1
+IP2,1,/scratch-cbe/users/ranjith.papareddy/chip_seq/chipseq/chip2.fq.gz,,,
