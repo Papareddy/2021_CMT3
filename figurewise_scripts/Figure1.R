@@ -142,7 +142,7 @@ axis(1,at=Tree,labels = row.names(symmetric.features),las=2)
 barplot(symmetric.features$CG.D.rel,add=T, names.arg = row.names(symmetric.features),col = "#a70f3d",border = NA,xaxt="n",las=2)
 
 
------- 1F and H  DMRs ------
+------ 1F and 1H  DMRs ------
 
 col=c("#8091c1","#7766cc","#f785b2","#e0b45c","#f7a59a","#9f8a76","#9ad485","#2b8977")
 CG.DMRs<- read.delim("/Volumes/nodine/lab/members/Ranjith/mCHG/figure1/CGDMRs/Developmental_DMRs/500sim.100bp.CG_Main_Dev_series_rms_results_collapsed.tsv",header=T)
@@ -160,7 +160,7 @@ boxplot(CHG.DMRs[,c(7:14)],outline=F,col=col,medcol="white",border="grey15",lty=
 
 
 
------- S1A GO Analysis ------
+------ S 1A GO Analysis ------
 S1A ### GO Analysis
 int.genes <- names(weight[1:25])
 int.genes <- factor(as.integer(all.genes %in% int.genes))
@@ -177,7 +177,7 @@ goEnrichment$Term <- paste(goEnrichment$Term,goEnrichment$GO.ID,  sep="-")
 goEnrichment$log10<- -log10(as.numeric(goEnrichment$elimFisher))
 
 
-------  Methylation rate and methyltransferases TPM correlation ------
+------ S 1B Methylation rate and methyltransferases TPM correlation ------
 CGmean<- as.data.frame(colMeans(CG.DMRs[,c(7:11,13,14)], na.rm = T, dims = 1))
 CGmean<-CGmean*100
 cormet<-as.data.frame(t(Covarient.Genes[1,c(1,2,4,5,8,9,10)])) ## cormat means correlation matrix
