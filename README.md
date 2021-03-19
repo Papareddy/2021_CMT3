@@ -2,7 +2,7 @@
 
 Pipe lines or softwares used for data analysis in this papaer.<br/>
 
-Content:<br/>
+**Content: ** <br/> 
 
 MethylC-seq: simple nextflow for methylation analysis wrote from scratch.<br/>
 ChIP-Seq: Modified from nf-core/chipseq v1.2.1 - Platinum Mole. <br/>
