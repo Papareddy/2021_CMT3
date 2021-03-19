@@ -142,7 +142,25 @@ axis(1,at=Tree,labels = row.names(symmetric.features),las=2)
 barplot(symmetric.features$CG.D.rel,add=T, names.arg = row.names(symmetric.features),col = "#a70f3d",border = NA,xaxt="n",las=2)
 
 
------- 1F and 1H  DMRs ------
+------ 1E and 1F DMR annotation ------
+
+overlaps<-read.table("~/Desktop/Manustrips/mCHG/figure1/CHGin_Overlaps.txt",header = T,stringsAsFactors = T)
+vioplot(overlaps$methylation_level_MET1-overlaps$methylation_level_WT,
+      overlaps$methylation_level_SJ.VIM-overlaps$methylation_level_SJ.WT,
+        overlaps$methylation_level_CMT3-overlaps$methylation_level_WT,
+        main="overlaped",las=2,outline=T,notch=T,names=c("MET1","VIM123","CMT3"),
+      col="lightcoral",lwd=1,boxcol="grey50",whiskcolr="grey50",outcol="grey40",staplecol="grey50")
+
+nonoverlaps<-read.table("~/Desktop/Manustrips/mCHG/figure1/CHGinNonOverlaps.txt",header = T,stringsAsFactors = T)
+vioplot(nonoverlaps$methylation_level_MET1-nonoverlaps$methylation_level_WT,
+        nonoverlaps$methylation_level_SJ.VIM-nonoverlaps$methylation_level_SJ.WT,
+        nonoverlaps$methylation_level_CMT3-nonoverlaps$methylation_level_WT,
+        main="Non_overlaped",las=2,outline=T,notch=T,names=c("MET1","VIM123","CMT3"),
+        col="#9088d4",lwd=1,boxcol="grey50",whiskcolr="grey50",outcol="grey40",staplecol="grey50")
+
+
+
+------ 1G and 1H  DMRs ------
 
 col=c("#8091c1","#7766cc","#f785b2","#e0b45c","#f7a59a","#9f8a76","#9ad485","#2b8977")
 CG.DMRs<- read.delim("/Volumes/nodine/lab/members/Ranjith/mCHG/figure1/CGDMRs/Developmental_DMRs/500sim.100bp.CG_Main_Dev_series_rms_results_collapsed.tsv",header=T)
