@@ -9,42 +9,42 @@ library(factoextra)
 
 
 #### LOAD NODINE DATA
-salmoncounts.MD.list<- list.files("/scratch-cbe/users/ranjith.papareddy/rCMT3_transcriptome_reanal/nodine_embryonic/results/salmon/",
+rsemcounts.MD.list<- list.files("/scratch-cbe/users/ranjith.papareddy/rCMT3_transcriptome_reanal/nodine_embryonic/results/rsem/",
                                       pattern = "gene_counts.csv",full.names=T)
 
-salmoncounts.MD.list<-salmoncounts.MD.list[-28]
+rsemcounts.MD.list<-rsemcounts.MD.list[-28]
 
-salmoncounts.MN = as.data.frame(do.call(cbind,lapply(salmoncounts.MD.list , function(x) {
+rsemcounts.MN = as.data.frame(do.call(cbind,lapply(rsemcounts.MD.list , function(x) {
   DF <- read.csv(x)
   colnames(DF)<- c(paste0(basename(x),'.GeneID'),paste0(basename(x),'count'))
   return(DF)})))
 
-colnames(salmoncounts.MN)<-gsub(colnames(salmoncounts.MN),pattern = "_salmon_gene_counts.csv|_|count",replacement = "")
-colnames(salmoncounts.MN)[1]<-"GeneId"
-salmoncounts.MN<-salmoncounts.MN%>%dplyr::select(-matches(".GeneID"))
-factor_table.MD = data.frame('name'=colnames(salmoncounts.MN[-1]),'genotype'=removeNumbers(colnames(salmoncounts.MN[-1])))
+colnames(rsemcounts.MN)<-gsub(colnames(rsemcounts.MN),pattern = "_rsem_gene_counts.csv|_|count",replacement = "")
+colnames(rsemcounts.MN)[1]<-"GeneId"
+rsemcounts.MN<-rsemcounts.MN%>%dplyr::select(-matches(".GeneID"))
+factor_table.MD = data.frame('name'=colnames(rsemcounts.MN[-1]),'genotype'=removeNumbers(colnames(rsemcounts.MN[-1])))
 
 #### LOAD RP DATA
-salmoncounts.RP.list<- list.files("/scratch-cbe/users/ranjith.papareddy/rCMT3_transcriptome_reanal/results/salmon/",
+rsemcounts.RP.list<- list.files("/scratch-cbe/users/ranjith.papareddy/rCMT3_transcriptome_reanal/results/rsem/",
                                   pattern = "gene_counts.csv",full.names=T)
 
-salmoncounts.RP.list<-salmoncounts.RP.list[-70]
+rsemcounts.RP.list<-rsemcounts.RP.list[-70]
 
 
-salmoncounts.RP = as.data.frame(do.call(cbind,lapply(salmoncounts.RP.list , function(x) {
+rsemcounts.RP = as.data.frame(do.call(cbind,lapply(rsemcounts.RP.list , function(x) {
   DF <- read.csv(x)
   colnames(DF)<- c(paste0(basename(x),'.GeneID'),paste0(basename(x),'count'))
   return(DF)})))
 
-colnames(salmoncounts.RP)<-gsub(colnames(salmoncounts.RP),pattern = "_salmon_gene_counts.csv|_|count",replacement = "")
-colnames(salmoncounts.RP)[1]<-"GeneId"
-salmoncounts.RP<-salmoncounts.RP%>%dplyr::select(-matches(".GeneID"))%>%dplyr::select(matches("GeneId|BAMpooled"))
-colnames(salmoncounts.RP)<-gsub(colnames(salmoncounts.RP),pattern = ".BAMpooled",replacement = "")
-factor_table.Rp = data.frame('name'=colnames(salmoncounts.RP[-1]),'genotype'=c(rep('RP.bc',3),rep('gCMT3',6),rep('rCMT3',6)))
+colnames(rsemcounts.RP)<-gsub(colnames(rsemcounts.RP),pattern = "_rsem_gene_counts.csv|_|count",replacement = "")
+colnames(rsemcounts.RP)[1]<-"GeneId"
+rsemcounts.RP<-rsemcounts.RP%>%dplyr::select(-matches(".GeneID"))%>%dplyr::select(matches("GeneId|BAMpooled"))
+colnames(rsemcounts.RP)<-gsub(colnames(rsemcounts.RP),pattern = ".BAMpooled",replacement = "")
+factor_table.Rp = data.frame('name'=colnames(rsemcounts.RP[-1]),'genotype'=c(rep('RP.bc',3),rep('gCMT3',6),rep('rCMT3',6)))
 
 
 
-full.counts.withplastids<-salmoncounts.RP%>%inner_join(salmoncounts.MN)
+full.counts.withplastids<-rsemcounts.RP%>%inner_join(rsemcounts.MN)
 ### filter pcg
 pc.genes <- scan('/groups/nodine/lab/members/Ranjith/annotations_ranj/gene_types/protein_coding.txt','character')
 mc.genes = scan('/groups/nodine/lab/members/Ranjith/annotations_ranj/gene_types/mitochondrial_chloroplast.txt','character')
@@ -110,13 +110,13 @@ pchs<-c(rep(8,9),rep(19,21),rep(8,6))
 
 ##### DEGS remove CA and R12C
 
-degs.salmomRP<-salmoncounts.RP
-rownames(degs.salmomRP)<-degs.salmomRP$GeneId
-degs.salmomRP<-degs.salmomRP[,c(2:4,11:13)]
-head(degs.salmomRP)
+degs.rsemRP<-rsemcounts.RP
+rownames(degs.rsemRP)<-degs.rsemRP$GeneId
+degs.rsemRP<-degs.rsemRP[,c(2:4,11:13)]
+head(degs.rsemRP)
 groups <- factor(c(rep("CGroup",3),rep("TGroup",3)))
 
-data<-round(degs.salmomRP)
+data<-round(degs.rsemRP)
 min_read <- 5
 data <- data[apply(data,1,function(x){max(x)}) > min_read,]
 sampleInfo <- data.frame(groups,row.names=colnames(data))
@@ -138,6 +138,6 @@ dim(resSig)
 with(resSig, plot(log2FoldChange,-log10(padj)))
 abline(v=c(2,-2),col="red")
 
-resSig.tpm<-as.data.frame(resSig)%>%rownames_to_column(var="GeneId")%>%inner_join(salmoncounts.RP)
+resSig.tpm<-as.data.frame(resSig)%>%rownames_to_column(var="GeneId")%>%inner_join(rsemcounts.RP)
 
 boxplot(log2(resSig.tpm[,c(8:22)]))
